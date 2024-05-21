@@ -1,0 +1,8 @@
+---
+- name: "Playbook para instalacao e configuracao do CRM Odoo"
+  hosts: "odoo"
+  become: true
+
+  roles:
+    - nginx
+    # - odoo

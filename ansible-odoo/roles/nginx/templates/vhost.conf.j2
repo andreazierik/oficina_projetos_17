@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+
+server {
+    listen      80;
+    server_name {{ domain }};
+
+    # security
+    include     nginxconfig.io/security.conf;
+
+    # logging
+    access_log  /var/log/nginx/{{ domain }}_access.log combined buffer=512k flush=1m;
+    error_log   /var/log/nginx/{{ domain }}_error.log warn;
+
+    # reverse proxy
+    location / {
+        proxy_pass            http://127.0.0.1:8069;
+        proxy_set_header Host $host;
+        include               nginxconfig.io/proxy.conf;
+    }
+
+    location ~* /web/ {
+        proxy_pass            http://127.0.0.1:8069;
+        proxy_set_header Host $host;
+        include               nginxconfig.io/proxy.conf;
+    }
+
+    # additional config
+    include nginxconfig.io/general.conf;
+}

@@ -1,0 +1,4 @@
+username: odoo17
+description: Perfil do odoo17
+repositorio: https://github.com/odoo/odoo.git
+clone_dir: /tmp/odoo17

@@ -1,0 +1,46 @@
+---
+- name: "Instalando pacotes necessarios"
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    update_cache: yes
+    state: "present"
+  loop:
+    - build-essential
+    - wget
+    - git
+    - python3.10-dev
+    - python3.10-venv
+    - libfreetype-dev
+    - libxml2-dev
+    - libzip-dev
+    - libsasl2-dev
+    - node-less
+    - libjpeg-dev
+    - zlib1g-dev
+    - libpq-dev
+    - libxslt1-dev
+    - libldap2-dev
+    - libtiff5-dev
+    - libopenjp2-7-dev
+    - libcap-dev
+    - wkhtmltopdf
+    - python3-pip
+
+- name: "Baixar e importar a chave GPG do Odoo"
+  ansible.builtin.apt_key:
+    url: 'https://nightly.odoo.com/odoo.key'
+    state: present
+    keyring: '/usr/share/keyrings/odoo-archive-keyring.gpg'
+
+- name: "Adicionar repositorio do Odoo"
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/usr/share/keyrings/odoo-archive-keyring.gpg] https://nightly.odoo.com/17.0/nightly/deb/ ./'
+    filename: 'odoo'
+    state: present
+
+- name: "Instalando pacote Odoo"
+  ansible.builtin.apt:
+    name:
+      - odoo
+    state: present
+    update_cache: yes

@@ -1,0 +1,39 @@
+---
+- name: "Instalando nginx"
+  ansible.builtin.apt:
+    name:
+      - '{{ package }}'
+    state: present
+
+- name: "Habilitando nginx na inicializacao"
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: '{{ package }}'
+    enabled: true
+    state: started
+
+- name: "Criando pasta nginxconfig.io"
+  ansible.builtin.file:
+    path: '{{ nginxconfig_io }}'
+    state: directory
+
+- name: "Criando arquivos deconfiguracao no nginx"
+  ansible.builtin.template:
+    src: '{{ item.origin }}'
+    dest: '{{ item.dest }}'
+  loop:
+    - { origin: 'general.conf.j2',  dest: '{{ nginxconfig_io }}/general.conf' }
+    - { origin: 'security.conf.j2', dest: '{{ nginxconfig_io }}/security.conf' }
+    - { origin: 'proxy.conf.j2',    dest: '{{ nginxconfig_io }}/proxy.conf' }
+    - { origin: 'nginx.conf.j2',    dest: '{{ nginx_dir }}/nginx.conf' }
+    - { origin: 'vhost.conf.j2',    dest: '{{ sites_available }}/{{ domain }}.conf' }
+  notify:
+    - Restart nginx
+
+- name: "Configurando VirtualHost"
+  ansible.builtin.file:
+    src: '{{ sites_available }}/{{ domain }}.conf'
+    dest: '{{ sites_enabled }}/{{ domain }}.conf'
+    state: link
+  notify:
+    - Restart nginx

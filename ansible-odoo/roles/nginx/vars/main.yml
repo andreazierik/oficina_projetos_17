@@ -1,0 +1,5 @@
+package: nginx
+nginx_dir: /etc/nginx
+nginxconfig_io: /etc/nginx/nginxconfig.io
+sites_available: /etc/nginx/sites-available
+sites_enabled: /etc/nginx/sites-enabled

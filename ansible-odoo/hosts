@@ -1,0 +1,2 @@
+[odoo]
+54.174.254.225 ansible_user=ubuntu ansible_ssh_private_key_file=/home/eandreazi/.ssh/new-key.pem domain=erp.andreazi.com
